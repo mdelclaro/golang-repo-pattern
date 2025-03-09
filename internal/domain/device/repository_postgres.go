@@ -24,12 +24,14 @@ func (r repository) CreateDevice(deviceData *device.Device) (int32, error) {
 	return deviceData.ID, r.HandleError(res)
 }
 
-func (r repository) GetDeviceByID(target *device.Device, id int32) (*device.Device, error) {
-	res := r.db.First(target, id)
-	return target, r.HandleError(res)
+func (r repository) GetDeviceByID(id int32) (*device.Device, error) {
+	device := &device.Device{}
+	res := r.db.First(device, id)
+	return device, r.HandleError(res)
 }
 
-func (r repository) GetDevices(target []device.Device, brand string, state *device.State) ([]device.Device, error) {
+func (r repository) GetDevices(brand string, state *device.State) ([]device.Device, error) {
+	device := []device.Device{}
 	m := make(map[string]interface{})
 
 	if brand != "" {
@@ -40,8 +42,8 @@ func (r repository) GetDevices(target []device.Device, brand string, state *devi
 		m["state"] = *state
 	}
 
-	res := r.db.Where(m).Find(&target)
-	return target, r.HandleError(res)
+	res := r.db.Where(m).Find(&device)
+	return device, r.HandleError(res)
 }
 
 func (r repository) UpdateDevice(deviceData *device.Device) error {

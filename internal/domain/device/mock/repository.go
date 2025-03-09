@@ -71,33 +71,33 @@ func (mr *MockRepositoryMockRecorder) DeleteDeviceByID(id any) *gomock.Call {
 }
 
 // GetDeviceByID mocks base method.
-func (m *MockRepository) GetDeviceByID(target *device.Device, id int32) (*device.Device, error) {
+func (m *MockRepository) GetDeviceByID(id int32) (*device.Device, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetDeviceByID", target, id)
+	ret := m.ctrl.Call(m, "GetDeviceByID", id)
 	ret0, _ := ret[0].(*device.Device)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetDeviceByID indicates an expected call of GetDeviceByID.
-func (mr *MockRepositoryMockRecorder) GetDeviceByID(target, id any) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) GetDeviceByID(id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDeviceByID", reflect.TypeOf((*MockRepository)(nil).GetDeviceByID), target, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDeviceByID", reflect.TypeOf((*MockRepository)(nil).GetDeviceByID), id)
 }
 
 // GetDevices mocks base method.
-func (m *MockRepository) GetDevices(target []device.Device, brand string, state *device.State) ([]device.Device, error) {
+func (m *MockRepository) GetDevices(brand string, state *device.State) ([]device.Device, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetDevices", target, brand, state)
+	ret := m.ctrl.Call(m, "GetDevices", brand, state)
 	ret0, _ := ret[0].([]device.Device)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetDevices indicates an expected call of GetDevices.
-func (mr *MockRepositoryMockRecorder) GetDevices(target, brand, state any) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) GetDevices(brand, state any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDevices", reflect.TypeOf((*MockRepository)(nil).GetDevices), target, brand, state)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDevices", reflect.TypeOf((*MockRepository)(nil).GetDevices), brand, state)
 }
 
 // HandleError mocks base method.

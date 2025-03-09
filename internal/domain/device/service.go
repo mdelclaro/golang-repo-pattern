@@ -37,26 +37,22 @@ func (s *Service) CreateDevice(deviceData *device.Device) (int32, error) {
 }
 
 func (s *Service) GetDeviceByID(id int32) (*device.Device, error) {
-	device := &device.Device{}
-
-	res, err := s.repo.GetDeviceByID(device, id)
+	device, err := s.repo.GetDeviceByID(id)
 	if err != nil {
 		return nil, ErrDeviceNotFound
 	}
 
-	return res, nil
+	return device, nil
 }
 
 func (s *Service) GetDevices(brand string, state *device.State) ([]device.Device, error) {
-	devices := []device.Device{}
-
-	return s.repo.GetDevices(devices, brand, state)
+	return s.repo.GetDevices(brand, state)
 }
 
 func (s *Service) UpdateDevice(deviceData *device.Device) error {
 	deviceData.CreationTime = time.Time{}
 
-	d, err := s.repo.GetDeviceByID(&device.Device{}, deviceData.ID)
+	d, err := s.repo.GetDeviceByID(deviceData.ID)
 	if err != nil {
 		return err
 	}
@@ -70,7 +66,7 @@ func (s *Service) UpdateDevice(deviceData *device.Device) error {
 }
 
 func (s *Service) DeleteDeviceByID(id int32) error {
-	d, err := s.repo.GetDeviceByID(&device.Device{}, id)
+	d, err := s.repo.GetDeviceByID(id)
 	if err != nil {
 		return err
 	}
