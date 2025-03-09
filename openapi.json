@@ -1,0 +1,207 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Device Service API",
+      "version": "1.0.0",
+      "description": "API documentation for the Device Service"
+    },
+    "paths": {
+      "/devices": {
+        "post": {
+          "summary": "Create a new device",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Device"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Device created successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Device"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input"
+            }
+          }
+        },
+        "get": {
+          "summary": "Get devices",
+          "parameters": [
+            {
+              "name": "brand",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "required": false,
+              "description": "Filter devices by brand"
+            },
+            {
+              "name": "state",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              },
+              "required": false,
+              "description": "Filter devices by state"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of devices",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Device"
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/devices/{id}": {
+        "get": {
+          "summary": "Get device by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "ID of the device to retrieve"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Device details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Device"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Device not found"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update device by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "ID of the device to update"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Device"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Device updated successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Device"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Device not found"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete device by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "ID of the device to delete"
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Device deleted successfully"
+            },
+            "404": {
+              "description": "Device not found"
+            },
+            "400": {
+              "description": "Device is in use"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Device": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "example": 1
+            },
+            "name": {
+              "type": "string",
+              "example": "Device1"
+            },
+            "brand": {
+              "type": "string",
+              "example": "Brand1"
+            },
+            "state": {
+              "type": "string",
+              "example": "available"
+            },
+            "creation_time": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2023-10-10T00:00:00Z"
+            }
+          },
+          "required": ["name", "brand", "state"]
+        }
+      }
+    }
+  }
