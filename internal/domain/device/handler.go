@@ -14,7 +14,7 @@ import (
 	"golang-repo-pattern/internal/pkg/entity/device"
 )
 
-const baseRoute = "/devices"
+const BaseRoute = "/devices"
 
 type httpHandler struct {
 	service Servicer
@@ -25,11 +25,11 @@ func NewHttpHandler(app *fiber.App, service Servicer) {
 		service: service,
 	}
 
-	app.Post(baseRoute, handler.createDevice)
-	app.Get(baseRoute+"/:id", handler.getDeviceByID)
-	app.Get(baseRoute, handler.getDevices)
-	app.Put(baseRoute+"/:id", handler.updateDevice)
-	app.Delete(baseRoute+"/:id", handler.deleteDeviceByID)
+	app.Post(BaseRoute, handler.createDevice)
+	app.Get(BaseRoute+"/:id", handler.getDeviceByID)
+	app.Get(BaseRoute, handler.getDevices)
+	app.Put(BaseRoute+"/:id", handler.updateDevice)
+	app.Delete(BaseRoute+"/:id", handler.deleteDeviceByID)
 }
 
 func (h *httpHandler) createDevice(c fiber.Ctx) error {
@@ -77,6 +77,10 @@ func (h *httpHandler) getDeviceByID(c fiber.Ctx) error {
 
 	device, err := h.service.GetDeviceByID(int32(id))
 	if err != nil {
+		if errors.Is(err, ErrDeviceNotFound) {
+			return c.Status(http.StatusNotFound).JSON(common.BuildError(err))
+		}
+
 		return c.Status(http.StatusInternalServerError).JSON(common.BuildError(err))
 	}
 
@@ -133,6 +137,10 @@ func (h *httpHandler) updateDevice(c fiber.Ctx) error {
 
 	device.ID = int32(id)
 	if err := h.service.UpdateDevice(device); err != nil {
+		if errors.Is(err, ErrUpdateDeviceInUse) {
+			return c.Status(http.StatusBadRequest).JSON(common.BuildError(err))
+		}
+
 		return c.Status(http.StatusInternalServerError).JSON(common.BuildError(err))
 	}
 
@@ -146,6 +154,10 @@ func (h *httpHandler) deleteDeviceByID(c fiber.Ctx) error {
 	}
 
 	if err := h.service.DeleteDeviceByID(int32(id)); err != nil {
+		if errors.Is(err, ErrDeleteDeviceInUse) {
+			return c.Status(http.StatusBadRequest).JSON(common.BuildError(err))
+		}
+
 		return c.Status(http.StatusInternalServerError).JSON(common.BuildError(err))
 	}
 

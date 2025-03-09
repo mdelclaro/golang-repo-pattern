@@ -39,7 +39,12 @@ func (s *Service) CreateDevice(deviceData *device.Device) (int32, error) {
 func (s *Service) GetDeviceByID(id int32) (*device.Device, error) {
 	device := &device.Device{}
 
-	return s.repo.GetDeviceByID(device, id)
+	res, err := s.repo.GetDeviceByID(device, id)
+	if err != nil {
+		return nil, ErrDeviceNotFound
+	}
+
+	return res, nil
 }
 
 func (s *Service) GetDevices(brand string, state *device.State) ([]device.Device, error) {

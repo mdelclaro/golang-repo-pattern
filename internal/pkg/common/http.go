@@ -8,14 +8,8 @@ type ErrorResponse struct {
 	Error string `json:"error,omitempty"`
 }
 
-func ParseResultToMap(result any) map[string]any {
-	return map[string]any{"data": result}
-}
-
-func BuildError(err error) map[string]any {
-	errResponse := &ErrorResponse{
+func BuildError(err error) *ErrorResponse {
+	return &ErrorResponse{
 		Error: err.Error(),
 	}
-
-	return ParseResultToMap(errResponse)
 }
