@@ -6,9 +6,12 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/cors"
+
+	"golang-repo-pattern/internal/infra/database"
 )
 
 func main() {
+	database.StartDb()
 	app := fiber.New()
 
 	app.Use(cors.New())

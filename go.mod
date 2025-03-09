@@ -4,7 +4,6 @@ go 1.23.0
 
 require (
 	github.com/gofiber/fiber/v3 v3.0.0-beta.4
-	github.com/mdelclaro/gobrax v0.0.0-20240817195851-8b3168d0a883
 )
 
 require (
