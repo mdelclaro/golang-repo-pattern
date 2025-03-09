@@ -10,14 +10,12 @@ import (
 )
 
 type repository struct {
-	db           *gorm.DB
-	defaultJoins []string
+	db *gorm.DB
 }
 
-func NewRepository(db *gorm.DB, joins ...string) Repository {
+func NewRepository(db *gorm.DB) Repository {
 	return repository{
-		db:           db,
-		defaultJoins: joins,
+		db: db,
 	}
 }
 
@@ -31,18 +29,18 @@ func (r repository) GetDeviceByID(target *device.Device, id int32) error {
 	return r.HandleError(res)
 }
 
-func (r repository) GetDevices(target []*device.Device, brand string, state *device.State) error {
-	device := &device.Device{}
+func (r repository) GetDevices(target *[]device.Device, brand string, state *device.State) error {
+	m := make(map[string]interface{})
 
 	if brand != "" {
-		device.Brand = brand
+		m["brand"] = brand
 	}
 
 	if state != nil {
-		device.State = *state
+		m["state"] = *state
 	}
 
-	res := r.db.Find(target).Where(device)
+	res := r.db.Where(m).Find(target)
 	return r.HandleError(res)
 }
 
@@ -59,8 +57,8 @@ func (r repository) UpdateDevice(deviceData *device.Device) error {
 	return r.HandleError(res)
 }
 
-func (r repository) DeleteDeviceByID(target *device.Device, id int32) error {
-	res := r.db.Delete(target, id)
+func (r repository) DeleteDeviceByID(id int32) error {
+	res := r.db.Delete(&device.Device{}, id)
 	if res.RowsAffected == 0 {
 		res.Error = fmt.Errorf("record not found")
 	}
