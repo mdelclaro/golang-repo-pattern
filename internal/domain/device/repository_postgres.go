@@ -19,17 +19,17 @@ func NewRepository(db *gorm.DB) Repository {
 	}
 }
 
-func (r repository) CreateDevice(deviceData *device.Device) error {
+func (r repository) CreateDevice(deviceData *device.Device) (int32, error) {
 	res := r.db.Create(deviceData)
-	return r.HandleError(res)
+	return deviceData.ID, r.HandleError(res)
 }
 
-func (r repository) GetDeviceByID(target *device.Device, id int32) error {
+func (r repository) GetDeviceByID(target *device.Device, id int32) (*device.Device, error) {
 	res := r.db.First(target, id)
-	return r.HandleError(res)
+	return target, r.HandleError(res)
 }
 
-func (r repository) GetDevices(target *[]device.Device, brand string, state *device.State) error {
+func (r repository) GetDevices(target []device.Device, brand string, state *device.State) ([]device.Device, error) {
 	m := make(map[string]interface{})
 
 	if brand != "" {
@@ -40,8 +40,8 @@ func (r repository) GetDevices(target *[]device.Device, brand string, state *dev
 		m["state"] = *state
 	}
 
-	res := r.db.Where(m).Find(target)
-	return r.HandleError(res)
+	res := r.db.Where(m).Find(&target)
+	return target, r.HandleError(res)
 }
 
 func (r repository) UpdateDevice(deviceData *device.Device) error {
