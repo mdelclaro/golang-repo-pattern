@@ -25,3 +25,4 @@ Make sure docker daemon is running. To install/build the dependencies:
 - Better logging
 - JWT auth
 - API versioning 
+- Use actual SQL for migrations
